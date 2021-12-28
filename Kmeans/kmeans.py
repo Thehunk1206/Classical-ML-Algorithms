@@ -87,8 +87,7 @@ class KMeansClustering(object):
 if __name__ == "__main__":
     np.random.seed(3)
     K = 2
-    # X, _ = make_blobs(n_samples=1000, centers=20, n_features=2, cluster_std=1.0, random_state=1)
-    # X = np.random.uniform(2, 0.5, size=(1000, 2))
+    # X, _ = make_blobs(n_samples=1000, centers=K, n_features=2, cluster_std=1.0, random_state=1)
     # X, _ = make_classification(n_samples=1000, n_features=2, n_redundant=0, n_informative=2, n_classes=K, n_clusters_per_class=1)
     X, _ = make_moons(n_samples=1000, noise=0.1)
 
