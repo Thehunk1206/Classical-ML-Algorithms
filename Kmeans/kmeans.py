@@ -61,7 +61,7 @@ class KMeansClustering(object):
     
     def plot_3d_cluster(self, centroids, x, y):
         ax = plt.axes(projection='3d')
-        ax.scatter3D(x[:,0], x[:,1], x[:,2], c=y, s=20, cmap='viridis')
+        ax.scatter3D(x[:,0], x[:,1], x[:,2], c=y, s=20, alpha =0.3,cmap='viridis')
         ax.scatter3D(centroids[:,0], centroids[:,1], centroids[:,2], c='black', s=100, alpha=1.0, marker='o')
         plt.show()
 
@@ -100,13 +100,13 @@ class KMeansClustering(object):
         
 
 if __name__ == "__main__":
-    np.random.seed(3)
-    K = 4
-    num_of_features = 2
+    np.random.seed(45)
+    K = 3
+    num_of_features = 3
     num_of_samples = 1000
-    X, _ = make_blobs(n_samples=num_of_samples, centers=K, n_features=num_of_features, cluster_std=1.0, random_state=1)
+    X, _ = make_blobs(n_samples=num_of_samples, centers=K, n_features=num_of_features, cluster_std=2.0, random_state=1)
     # X, _ = make_classification(n_samples=num_of_samples, n_features=num_of_features, n_redundant=0, n_informative=2, n_classes=K, n_clusters_per_class=1)
-    # X, _ = make_moons(n_samples=num_of_features, noise=0.1)
+    # X, _ = make_moons(n_samples=num_of_samples, noise=0.1)
 
     kmeans = KMeansClustering(X, K, max_iter=30)
     y_label = kmeans.fit(X)
