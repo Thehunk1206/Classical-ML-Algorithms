@@ -1,8 +1,9 @@
 import numpy as np
 from mpl_toolkits import mplot3d
 from matplotlib import pyplot as plt
+import seaborn as sns
 
-from sklearn.datasets import load_digits, load_wine
+from sklearn.datasets import load_digits, load_wine, load_breast_cancer
 from sklearn.preprocessing import StandardScaler
 
 '''
@@ -65,10 +66,10 @@ class PCA(object):
 
 if __name__ == "__main__":
     # Load the dataset
-    wine = load_wine()
-    data = wine.data
+    breast_cancer = load_breast_cancer()
+    data = breast_cancer.data
     print(data.shape)
-    labels = wine.target
+    labels = breast_cancer.target
     print(labels.shape)
 
     # Standardize the dataset
@@ -84,21 +85,27 @@ if __name__ == "__main__":
 
     # Plot the projected data
     fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
-    ax.scatter(pca.fitted_components[:,0], pca.fitted_components[:,1], pca.fitted_components[:,2], c=labels)
+    # ax = fig.add_subplot(111, projection='3d')
+    ax = fig.add_subplot(111)
+    ax.scatter(pca.fitted_components[:,0], pca.fitted_components[:,1], c=labels)
+    ax.title.set_text('PCA on Breast Cancer Dataset')
     ax.set_xlabel('PC1')
     ax.set_ylabel('PC2')
-    ax.set_zlabel('PC3')
+    # ax.set_zlabel('PC3')
     plt.show()
 
-    # Plot the cumulative variance explained
+    # Plot the variance explained
     fig = plt.figure()
     ax = fig.add_subplot(111)
-    ax.plot(pca.fitted_explained_variance)
+    ax.plot(pca.fitted_explained_variance, 'o-')
+    ax.title.set_text('Explained Variance of PCA on Breat Cancer Dataset')
+    ax.set_xlabel('Principal Component')
+    ax.set_ylabel('% of explained Variance')
     plt.show()
 
     # Plot covariance matrix
     fig = plt.figure()
     ax = fig.add_subplot(111)
-    ax.imshow(pca.fitted_covariance_matrix)
+    sns.heatmap(pca.fitted_covariance_matrix, cmap='viridis')
+    ax.title.set_text('Covariance Matrix of PCA on Breast Cancer Dataset')
     plt.show()
