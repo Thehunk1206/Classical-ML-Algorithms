@@ -8,7 +8,7 @@ import sys
 
 # Create a class for k-means clustering algorithm
 class KMeansClustering(object):
-    def __init__(self, X:np.ndarray, K:int, max_iter:int = 200) -> None:
+    def __init__(self, K:int, max_iter:int = 200) -> None:
         super().__init__()
         self.K = K
         self.max_iter = max_iter
@@ -108,7 +108,7 @@ if __name__ == "__main__":
     # X, _ = make_classification(n_samples=num_of_samples, n_features=num_of_features, n_redundant=0, n_informative=2, n_classes=K, n_clusters_per_class=1)
     # X, _ = make_moons(n_samples=num_of_samples, noise=0.1)
 
-    kmeans = KMeansClustering(X, K, max_iter=30)
+    kmeans = KMeansClustering(K, max_iter=30)
     y_label = kmeans.fit(X)
     
     

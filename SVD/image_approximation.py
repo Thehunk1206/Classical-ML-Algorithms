@@ -43,7 +43,9 @@ def plot_singular_values(s: np.ndarray):
     plt.figure(figsize=(20, 20))
     plt.tight_layout()
 
-    plt.semilogy(s)
+    plt.semilogy(s, '-o', label='Singular Values')
+    plt.xlabel('Rank')
+    plt.ylabel('Energy')
     plt.title('Singular Values')
     plt.savefig('images/singular_values.png')
     plt.show()
@@ -56,7 +58,9 @@ def plot_cumulative_sum_singular(s: np.ndarray):
     plt.figure(figsize=(20, 20))
     plt.tight_layout()
 
-    plt.plot(np.cumsum(s)/np.sum(s))
+    plt.plot(np.cumsum(s)/np.sum(s), '-o', label='Cumulative Sum')
+    plt.xlabel('Rank')
+    plt.ylabel('% STD. Variation')
     plt.title('Cumulative sum of singular values')
     plt.savefig('images/cumulative_sum_singular.png')
     plt.show()
