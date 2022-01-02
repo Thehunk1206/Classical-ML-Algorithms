@@ -5,3 +5,5 @@
 2. [Singular Value Decomposition (SVD)](https://github.com/Thehunk1206/Classical-ML-Algorithms/blob/master/SVD/)
 
 3. [Principal Component Analysis (PCA)](https://github.com/Thehunk1206/Classical-ML-Algorithms/tree/master/PCA)
+
+4. [K-Nearest Neighbour Classifier (KNN)](https://github.com/Thehunk1206/Classical-ML-Algorithms/tree/master/KNN) 
