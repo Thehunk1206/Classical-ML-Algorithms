@@ -1,17 +1,18 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
-from sklearn.datasets import load_breast_cancer, load_digits, load_wine
+from sklearn.datasets import load_breast_cancer, load_digits
 
 from sklearn.decomposition import PCA
+from sklearn.metrics import classification_report, confusion_matrix
 
 from tqdm import tqdm
 
 '''
-TODO: Can be op
-Class to perform KNN classification on a dataset
+TODO: Can be optimized by using a single for loop instead of two nested for loops
 
 1. Split the dataset into training and test sets
 2. Scale the data
@@ -48,7 +49,7 @@ class KNN:
 
 if __name__ == "__main__":
 
-    data = load_wine()
+    data = load_digits()
     X = data.data
     Y = data.target
 
@@ -61,36 +62,46 @@ if __name__ == "__main__":
     X_train = scaler.fit_transform(X_train)
     X_test = scaler.fit_transform(X_test)
 
+    # Comment out the below block to use PCA
+    ###############################################################################
     # pca = PCA(n_components=3)
     # X_train = pca.fit_transform(X_train)
     # X_test = pca.fit_transform(X_test)
 
     # print(f'rX-Train set shape:{X_train.shape}\nrX- Test set shape: {X_test.shape}')
+    ###############################################################################
 
-    accuracies = {'k':[],'accuracy':[]}
-    for k in tqdm(range(0,20, 2)):
-        k = 1 if k == 0 else k
-        knn = KNN(k)
-        knn.train(X_train, y_train)
-        accuracies['k'].append(k)
-        accuracies['accuracy'].append(knn.accuracy(X_test, y_test))
+    #Comment out below block to plot K vs Accuracy
+    ##############################################################################################
+    # accuracies = {'k':[],'accuracy':[]}
+    # for k in tqdm(range(0,22, 2)):
+    #     k = 1 if k == 0 else k
+    #     knn = KNN(k)
+    #     knn.train(X_train, y_train)
+    #     accuracies['k'].append(k)
+    #     accuracies['accuracy'].append(knn.accuracy(X_test, y_test))
 
-    fig, ax = plt.subplots()
-    ax.plot(accuracies['k'], accuracies['accuracy'], '-o')
-    ax.set_xlabel('K')
-    ax.set_ylabel('Accuracy')
-    ax.set_title('K vs Accuracy')
+    # fig, ax = plt.subplots()
+    # ax.plot(accuracies['k'], accuracies['accuracy'], '-o')
+    # ax.set_xlabel('K')
+    # ax.set_ylabel('Accuracy')
+    # ax.set_title('K vs Accuracy')
 
-    for k, acc in zip(accuracies['k'], accuracies['accuracy']):
-        ax.annotate(f'({k},{acc:.2f})', (k, acc+0.01))
-    plt.show()
+    # for k, acc in zip(accuracies['k'], accuracies['accuracy']):
+    #     ax.annotate(f'({k},{acc:.2f})', (k, acc+0.01))
+    # plt.show()
+    ##############################################################################################
 
-    knn = KNN(k=10)
+    #############################################################################################
+    knn = KNN(k=5)
     knn.train(X_train, y_train)
-    print(knn.accuracy(X_test, y_test))
-
-
-    y = knn.predict(X_test[2].reshape(1, -1))
-    print(f'Predicted label: {y}, Actual label: {y_test[2]}')
-
-
+    print(f'Accuracy: {float(knn.accuracy(X_test, y_test)).__round__(2)}%')
+    print(f'Confusion Matrix:\n{confusion_matrix(y_test, knn.predict(X_test))}')
+    sns.heatmap(confusion_matrix(y_test, knn.predict(X_test),labels=data.target_names), annot=True, fmt='d', cmap='Blues')
+    sns.set(font_scale=1.5)
+    plt.title('Confusion Matrix')
+    plt.xlabel('Actual Label')
+    plt.ylabel('Predicted Label')
+    plt.show()
+    print(f'Classification Report:\n{classification_report(y_test, knn.predict(X_test))}')
+    ##############################################################################################
