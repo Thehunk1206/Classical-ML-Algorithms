@@ -29,10 +29,25 @@ class KNN:
         self.X_train = X
         self.y_train = Y
 
-    def _compute_euclidean_distance(self, x, y):
+    def _compute_euclidean_distance(self, x:np.ndarray, y:np.ndarray)->np.float32:
+        '''
+        compute the euclidean distance between two vector points
+        args:
+            x: np.ndarray
+            y: np.ndarray
+        return:
+            euclidean distance
+        '''
         return np.sqrt(np.sum((x-y)**2))
     
     def predict(self, X_test:np.ndarray)-> np.ndarray:
+        '''
+        Predict the class of the test data
+        args:
+            X_test: np.ndarray
+        return:
+            y_pred: np.ndarray
+        '''
         y_pred = np.zeros(X_test.shape[0])
         for i,x in enumerate(X_test):
             distances = [self._compute_euclidean_distance(x, x_train) for x_train in self.X_train]
@@ -41,7 +56,15 @@ class KNN:
             y_pred[i] = np.argmax(np.bincount(k_nearest_labels))
         return y_pred
 
-    def accuracy(self, X_test, y_test):
+    def accuracy(self, X_test, y_test)->float:
+        '''
+        Compute the accuracy of the model
+        args:
+            X_test: np.ndarray
+            y_test: np.ndarray
+        return:
+            accuracy: float
+        '''
         y_pred = self.predict(X_test)
         n_correct = np.sum(y_pred == y_test)
         return n_correct/len(y_test) * 100.0
@@ -49,7 +72,7 @@ class KNN:
 
 if __name__ == "__main__":
 
-    data = load_digits()
+    data = load_breast_cancer()
     X = data.data
     Y = data.target
 
