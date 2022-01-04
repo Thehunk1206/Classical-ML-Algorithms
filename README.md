@@ -7,3 +7,5 @@
 3. [Principal Component Analysis (PCA)](https://github.com/Thehunk1206/Classical-ML-Algorithms/tree/master/PCA)
 
 4. [K-Nearest Neighbour Classifier (KNN)](https://github.com/Thehunk1206/Classical-ML-Algorithms/tree/master/KNN) 
+
+5. [Linear Regression using Gradient Descent](https://github.com/Thehunk1206/Classical-ML-Algorithms/tree/master/LinearRegression) 
