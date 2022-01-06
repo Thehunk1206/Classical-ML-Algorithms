@@ -21,10 +21,11 @@ Class to implement Multiple Linear Regression Model.
 '''
 
 class LinearRegression_GD(object):
-    def __init__(self, lr:float = 1e-4, iteration:int = 2000) -> None:
+    def __init__(self, lr:float = 1e-4, iteration:int = 2000, alpha:float=0.1) -> None:
         super().__init__()
         self.lr = lr
         self.iteration = iteration
+        self.alpha = alpha
         self.W = None
     
     def _forward_pass(self, X:np.ndarray) -> np.ndarray:
@@ -48,6 +49,36 @@ class LinearRegression_GD(object):
         '''
         return np.sum((y_pred-y_true)**2)/y_pred.shape[0]
     
+    def _l2_regulaization(self)->np.ndarray:
+        '''
+        Compute the l2 regularization term
+
+        L2 Regularization is given by:
+        L2 = lambda/2 * ||W||^2
+
+        NOTE: We do not regularize bias term, therefore we do not include the first element of self.W in the regularization
+        return:
+            l2_reg: np.ndarray(1,1)
+        '''
+        return self.alpha * np.linalg.norm(self.W[1:],ord=2)
+    
+    def _gradient_penalty(self):
+        '''
+        Compute the gradient penalty term for penalizing the model to get a regularizing effect.
+
+        gradient of L2 regularization term is given by:
+        dReg/dW = lambda * W
+
+        return:
+            gradient_penalty: np.ndarray(m,1)
+        '''
+        gradient_penalty = np.asarray(self.alpha * self.W[1:])
+
+        # Insert Zero for the bias term in order to avoid regularization of the bias term
+        gradient_penalty = np.insert(gradient_penalty, 0, 0, axis=0)
+
+        return gradient_penalty
+
     def _gradient_descent(self, X:np.ndarray, y:np.ndarray, y_pred:np.ndarray)->None:
         '''
         Gradient Descent function
@@ -57,7 +88,9 @@ class LinearRegression_GD(object):
         return:
             None
         '''
+        gp = self._gradient_penalty()/X.shape[0]
         dldw = 2*np.dot(X.T, (y_pred - y))/X.shape[0] # Gradient of the loss function with respect to the weights(2*X.T*(y_pred-y)/n)
+        dldw = dldw + gp # Add the gradient penalty term to the gradient of the loss function
         self.W = self.W - self.lr * dldw # Update the weights
     
     def fit(self, X:np.ndarray, y:np.ndarray):
@@ -81,7 +114,7 @@ class LinearRegression_GD(object):
         # Iterate over the number of iterations
         for i in range(self.iteration+1):
             y_pred = self._forward_pass(X)
-            loss = self.loss(y_pred, y)
+            loss = self.loss(y_pred, y) + self._l2_regulaization()/X.shape[0]
             self._gradient_descent(X, y, y_pred)
 
             if i%200 == 0:
@@ -100,7 +133,7 @@ class LinearRegression_GD(object):
         return np.dot(X, self.W[1:]) + self.W[0] 
     
 if __name__ == "__main__":
-    data = load_boston()
+    data = fetch_california_housing()
     X = data.data
     y = data.target
 
@@ -118,7 +151,7 @@ if __name__ == "__main__":
     X_test = scaler.fit_transform(X_test)
 
     # Create a Linear Regression Model
-    linear_reg = LinearRegression_GD(lr=0.01, iteration=2000)
+    linear_reg = LinearRegression_GD(lr=0.01, iteration=2000, alpha=3.0)
     w, bias = linear_reg.fit(X_train, np.expand_dims(y_train, axis=1))
     print(f'Trained Weights: {w}')
     print(f'Trained Bias: {bias}')

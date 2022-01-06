@@ -13,10 +13,11 @@ Class to implement Logistic Regression Model.
 '''
 
 class LogisticRegression(object):
-    def __init__(self, lr:float=0.01, iteration:int = 2000) -> None:
+    def __init__(self, lr:float=0.01, iteration:int = 2000, alpha:float=1.0) -> None:
         super().__init__()
         self.lr = lr
         self.iteration = iteration
+        self.alpha = alpha
         self.W = None
         self.b = None
 
@@ -42,7 +43,11 @@ class LogisticRegression(object):
     
     def loss(self, y_pred:np.ndarray, y_true:np.ndarray)->np.float32:
         '''
-        Compute Log loss
+        Compute Cross Entropy Loss
+
+        Cross Entropy loss is given as:
+        CE = -sum(y * log(y') + (1-y) * log(1-y'))/n
+
         args:
             y_pred: np.ndarray, predicted values
             y_true: np.ndarray, true values
@@ -51,6 +56,32 @@ class LogisticRegression(object):
         '''
         return -np.sum(y_true*np.log(y_pred) + (1-y_true)*np.log(1-y_pred))/y_pred.shape[0]
     
+    def _l2_regularization(self):
+        '''
+        Compute the l2 regularization term
+
+        L2 Regularization is given by:
+        L2 = lambda/2 * ||W||^2
+
+        return:
+            l2_reg: np.ndarray(1,1)
+        '''
+        
+        return self.alpha * np.linalg.norm(self.W, ord=2)
+    
+    def _gradient_penalty(self):
+        '''
+        Compute the gradient penalty term for penalizing the model to get a regularizing effect.
+
+        gradient of L2 regularization term is given by:
+        dReg/dW = lambda * W
+
+        return:
+            gradient_penalty: np.ndarray(m,1)
+        '''
+        gradient_penalty = np.asarray(self.alpha * self.W)
+        return gradient_penalty
+
     def _gradient_descent(self,X:np.ndarray, y:np.ndarray, y_pred:np.ndarray)->None:
         '''
         Gradient Descent function
@@ -58,8 +89,11 @@ class LogisticRegression(object):
             X: np.ndarray(n,m), Input data
             y: np.ndarray(n,1), Output data
         '''
+        gp = self._gradient_penalty()/X.shape[0] # Compute the gradient penalty
+
         # Calculate the gradient of the loss function with respect to the weights and bias
         dldw = np.dot(X.T, (y_pred - y))/X.shape[0]
+        dldw = dldw + gp # Add the gradient penalty to the gradient of the loss function
         dldb = np.sum(y_pred - y)/X.shape[0]
 
         # Update the weights and bias
@@ -83,7 +117,7 @@ class LogisticRegression(object):
         # Iterate over the number of iterations
         for i in range(self.iteration+1):
             y_pred = self._forward_pass(X) # Forward pass
-            loss = self.loss(y_pred, y) # Compute the log loss
+            loss = self.loss(y_pred, y) + self._l2_regularization()/X.shape[0] # Compute the log loss
             self._gradient_descent(X, y, y_pred) # Update the weights and bias using gradient descent
 
             if i % 200 == 0:
@@ -121,7 +155,7 @@ if __name__ == "__main__":
     X_test = scaler.fit_transform(X_test)
 
     # Train the model
-    log_reg = LogisticRegression(lr=0.1, iteration=4000)
+    log_reg = LogisticRegression(lr=0.1, iteration=4000, alpha=0.1)
     W, b = log_reg.fit(X_train, y_train[:, np.newaxis])
     print(f'Weights: \n{W}')
     print(f'Bias: {b}\n')
