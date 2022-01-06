@@ -23,6 +23,6 @@
 
 4. [K-Nearest Neighbour Classifier (KNN)](https://github.com/Thehunk1206/Classical-ML-Algorithms/tree/master/KNN) 
 
-5. [Linear Regression using Gradient Descent](https://github.com/Thehunk1206/Classical-ML-Algorithms/tree/master/LinearRegression) 
+5. [Linear Regression using Gradient Descent (L2 Regularized)](https://github.com/Thehunk1206/Classical-ML-Algorithms/tree/master/LinearRegression) 
 
-6. [Logistic Regression using Gradient Descent](https://github.com/Thehunk1206/Classical-ML-Algorithms/tree/master/LogisticRegression)
+6. [Logistic Regression using Gradient Descent (L2 Regularize)](https://github.com/Thehunk1206/Classical-ML-Algorithms/tree/master/LogisticRegression)
