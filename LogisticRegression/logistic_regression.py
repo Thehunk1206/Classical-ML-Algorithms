@@ -137,6 +137,14 @@ class LogisticRegression(object):
         assert 0 < threshold < 1, 'Threshold must be between 0 and 1'
         y_pred = self._forward_pass(X)
         return np.where(y_pred > 0.5, 1, 0)
+    
+    @property
+    def weights(self):
+        return self.W
+    
+    @property
+    def bias(self):
+        return self.b
 
 if __name__ == "__main__":
     # Load the dataset

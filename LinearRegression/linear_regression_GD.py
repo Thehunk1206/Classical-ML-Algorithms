@@ -130,8 +130,16 @@ class LinearRegression_GD(object):
         return:
             y_pred: np.ndarray(n,1)
         '''
-        return np.dot(X, self.W[1:]) + self.W[0] 
+        return np.dot(X, self.W[1:]) + self.W[0]
     
+    @property
+    def weights(self)->np.ndarray:
+        return self.W[1:]
+    
+    @property
+    def bias(self)->np.ndarray:
+        return self.W[0]
+
 if __name__ == "__main__":
     data = fetch_california_housing()
     X = data.data
