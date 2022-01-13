@@ -274,11 +274,11 @@ def plot_contour(X, y, svm:SVM, title:str):
     plt.title(title)
     plt.show()
 
-if __name__ == "__main__":
+def main():
     np.random.seed(42)
 
-    data = make_moons(n_samples=200, noise=0.1, random_state=42)
-    # data = make_classification(n_samples=200, n_features=2, n_redundant=0, n_informative=2)
+    # data = make_moons(n_samples=200, noise=0.1, random_state=42)
+    data = make_classification(n_samples=200, n_features=2, n_redundant=0, n_informative=2)
     X = data[0]
     y = data[1]
 
@@ -286,12 +286,19 @@ if __name__ == "__main__":
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=4)
 
     # Create a SVM classifier
-    svm = SVM(C=1.0, kernel='rbf', degree=3, gamma=3.0)
+    svm = SVM(C=1.0, kernel='rbf', degree=2, gamma=1.0)
     svm.fit(X_train, y_train)
 
     predicted = svm.predict(X_test)
     print(f'Accuracy: {accuracy_score(y_test, predicted)}')
 
-    title = f'SVM with C={svm.C}, kernel={svm.kernel}, degree={svm.degree}, gamma={svm.gamma}'
+    if svm.kernel == 'linear':
+        title = f'Linear Kernel, C={svm.C}'
+    elif svm.kernel == 'rbf':
+        title = f'RBF Kernel, C={svm.C}, gamma={svm.gamma}'
+    elif svm.kernel == 'poly':
+        title = f'SVM with C={svm.C}, kernel={svm.kernel}, degree={svm.degree}, gamma={svm.gamma}'
     plot_contour(X_train, y_train, svm, title)
-    
+
+if __name__ == "__main__":
+    main()
