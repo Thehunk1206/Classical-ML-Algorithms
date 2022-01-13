@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from scipy.optimize import minimize, Bounds, LinearConstraint
 from scipy.sparse import data
 
-from sklearn.datasets import make_blobs, load_breast_cancer, make_moons, make_classification
+from sklearn.datasets import make_moons, make_classification
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.metrics.pairwise import rbf_kernel, polynomial_kernel, linear_kernel
@@ -277,13 +277,8 @@ def plot_contour(X, y, svm:SVM, title:str):
 if __name__ == "__main__":
     np.random.seed(42)
 
-    # data = load_breast_cancer()
-    # X = data.data
-    # y = data.target
-
-    # data = make_moons(n_samples=200, noise=0.1, random_state=42)
-    # data = make_blobs(n_samples=100, centers=2, n_features=2, random_state=42, cluster_std=2.0)
-    data = make_classification(n_samples=200, n_features=2, n_redundant=0, n_informative=2)
+    data = make_moons(n_samples=200, noise=0.1, random_state=42)
+    # data = make_classification(n_samples=200, n_features=2, n_redundant=0, n_informative=2)
     X = data[0]
     y = data[1]
 
@@ -291,7 +286,7 @@ if __name__ == "__main__":
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=4)
 
     # Create a SVM classifier
-    svm = SVM(C=1.0, kernel='poly', degree=3, gamma=3.0)
+    svm = SVM(C=1.0, kernel='rbf', degree=3, gamma=3.0)
     svm.fit(X_train, y_train)
 
     predicted = svm.predict(X_test)
