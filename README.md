@@ -26,3 +26,5 @@
 5. [Linear Regression using Gradient Descent (L2 Regularized)](https://github.com/Thehunk1206/Classical-ML-Algorithms/tree/master/LinearRegression) 
 
 6. [Logistic Regression using Gradient Descent (L2 Regularize)](https://github.com/Thehunk1206/Classical-ML-Algorithms/tree/master/LogisticRegression)
+
+7.[Support Vector Mahine using Lagrangian Multipliers(with Linear, Polynomial, RBF(Radial Basis Function) kernels)](https://github.com/Thehunk1206/Classical-ML-Algorithms/tree/master/SVM)
